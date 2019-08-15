@@ -36,7 +36,7 @@ app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
 
-//Registro
+//Registro de provededor
 app.post('/proveedor/registry', (req, res) => {
     let emp = req.body;
     var username = req.body.id;
@@ -61,7 +61,7 @@ app.post('/proveedor/registry', (req, res) => {
     
 });
 
-//Get horarios
+//Visualizar   horarios
 
 app.get('/client/:id', (req, res) => {
     mysqlConnection.query('SELECT horarios.fecha, horarios.hora_inicio, horarios.hora_fin FROM horarios, proveedor WHERE \
@@ -73,8 +73,8 @@ app.get('/client/:id', (req, res) => {
     })
 });
 
-//ingresar horarios
 
+//ingresar horarios
 app.post('/proveedor/horario', (req, res) => {
 	var username = session.code;
 	let emp = req.body;
@@ -108,7 +108,7 @@ app.post('/proveedor/horario', (req, res) => {
 
 
 
-
+//Procedimiento para obtener fechas intermedias
 var getDates = function(startDate, endDate) {
   var dates = [],
       currentDate = startDate,
@@ -123,3 +123,28 @@ var getDates = function(startDate, endDate) {
   }
   return dates;
 };
+
+
+//Insertar horario
+app.post('/cliente/schedule', (req, res) => {
+	var usercode = session.code;
+  let emp = req.body;
+  var sql1 = "SET @fecha = ?;SET @hora_inicio = ?, SET @hora_fin = ?, SET @usuario;\
+  CALL addschedule_client(@fecha,@hora_inicio,@hora_fin, @usuario);";
+  var sql2 = "SET @fecha = ?;SET @hora_inicio = ?, SET @hora_fin = ?, SET @usuario;\
+  CALL addschedule_prov(@fecha,@hora_inicio,@hora_fin, @usuario);";
+  mysqlConnection.query(sql1, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode], (err, rows, fields) => {
+    if (!err)
+        res.send('Updated successfully');
+
+    else
+        console.log(err);
+})
+mysqlConnection.query(sql2, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode], (err, rows, fields) => {
+  if (!err)
+      res.send('Updated successfully');
+
+  else
+      console.log(err);
+})
+});
