@@ -39,12 +39,12 @@ console.log('todo list RESTful API server started on: ' + port);
 //Registro de provededor
 app.post('/proveedor/registry', (req, res) => {
     let emp = req.body;
-    var username = req.body.id;
+    var username = req.body.username;
     var email = req.body.email;
-    var sql = "SET @id = ?;SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
-    CALL proveedorcall(@id,@paswd,@email, @nombres, @apellidos);";
+    var sql = "SET @username = ?SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
+    CALL addproveedor(@id,@paswd,@email, @nombres, @apellidos);";
 
-	mysqlConnection.query('SELECT * FROM usuario WHERE id = ? OR email = ?', [username, email], function(error, results, fields) {
+	mysqlConnection.query('SELECT * FROM usuario WHERE username = ? OR email = ?', [username, email], function(error, results, fields) {
 	if (results.length > 0) {
 		console.log("Not unique");
 
@@ -64,8 +64,8 @@ app.post('/proveedor/registry', (req, res) => {
 //Visualizar   horarios
 
 app.get('/client/:id', (req, res) => {
-    mysqlConnection.query('SELECT horarios.fecha, horarios.hora_inicio, horarios.hora_fin FROM horarios, proveedor WHERE \
-      proveedor.id = horario.proveedor AND proveedor.id = ?', [req.params.id], (err, rows, fields) => {
+    mysqlConnection.query('SELECT horario.fecha, horario.hora_inicio, horario.hora_fin FROM horario, proveedor WHERE \
+      proveedor.codproveedor = horario.proveedor AND proveedor.codproveedor = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
         else
@@ -76,7 +76,7 @@ app.get('/client/:id', (req, res) => {
 
 //ingresar horarios
 app.post('/proveedor/horario', (req, res) => {
-	var username = session.code;
+	var username = req.session.code;
 	let emp = req.body;
   let fecha = req.body.fecha;
   let should = true;
@@ -147,4 +147,33 @@ mysqlConnection.query(sql2, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode]
   else
       console.log(err);
 })
+});
+
+//Visualizar solicitudes
+app.get('/proveedor/solicitudes', (req, res) => {
+  mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
+    proveedor.codproveedor = solicitud.proveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
+      if (!err)
+          res.send(rows);
+      else
+          console.log(err);
+  })
+});
+
+
+//aceptar solicitud
+app.post('/proveedor/solicitud/:id', (req, res) => {
+	var usercode = session.code;
+  let emp = req.body;
+  var sql1 = "SET @solicitud = ?;\
+  CALL change_accepted(@solicitud);";
+ 
+  mysqlConnection.query(sql1, [req.params.id], (err, rows, fields) => {
+    if (!err)
+        res.send('Updated successfully');
+
+    else
+        console.log(err);
+})
+
 });
