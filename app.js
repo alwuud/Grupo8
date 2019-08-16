@@ -161,6 +161,7 @@ app.get('/proveedor/solicitudes', (req, res) => {
 });
 
 
+
 //aceptar solicitud
 app.post('/proveedor/solicitud/:id', (req, res) => {
 	var usercode = session.code;
