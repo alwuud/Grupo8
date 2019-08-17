@@ -42,7 +42,7 @@ app.post('/proveedor/registry', (req, res) => {
     var username = req.body.username;
     var email = req.body.email;
     var sql = "SET @username = ?; SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?; SET @categoria = ?;\
-    INSERT INTO proveedor ( username, contrasena, email, nombre, apellido, categoria_codcategoria ) \
+    INSERT INTO proveedor ( username, password, email, nombres, apellidos, categoria_codcategoria ) \
      VALUES ( @username,@paswd,@email, @nombres, @apellidos, @categoria);"
     var sql2 = "SET @username = ?SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
     CALL addproveedor(@username,@paswd,@email, @nombres, @apellidos);";
@@ -79,11 +79,12 @@ app.get('/client/:id', (req, res) => {
 
 //ingresar horarios
 app.post('/proveedor/horario', (req, res) => {
-	var usercode = req.session.code;
+	//var usercode = req.session.code;
+	var usercode = 2;
 	let emp = req.body;
   let fecha = req.body.fecha;
   let should = true;
-  mysqlConnection.query('SELECT horario.fecha FROM horario WHERE horario.proveedor_codproveedor = ?', [code], (err, rows, fields) => {
+  mysqlConnection.query('SELECT horario.fecha FROM horario WHERE horario.proveedor_codproveedor = ?', [usercode], (err, rows, fields) => {
         if (!err){
           rows.forEach(function(row) {
             if(fecha == row.fecha)
@@ -130,14 +131,15 @@ var getDates = function(startDate, endDate) {
 
 
 //agendar horario
-app.post('/cliente/schedule', (req, res) => {
-	var usercode = session.code;
+app.post('/cliente/schedule/:id', (req, res) => {
+  //var usercode = session.code;
+  var usercode = 1;
   let emp = req.body;
-  var sql1 = "SET @horario = ?; SET @usuario; SET @proveedor;\
-  INSERT INTO cita ( horario_codhorario, cliente_codcliente, proveedor_codproveedor ) \
-  VALUES ( @horario, @usuario, @proveedor)";
+  var sql1 = "SET @horario = ?; SET @usuario = ?;\
+  INSERT INTO cita ( horario_codhorario, cliente_codcliente ) \
+  VALUES ( @horario, @usuario)";
 
-  mysqlConnection.query(sql1, [emp.horario, usercode,emp.proveedor], (err, rows, fields) => {
+  mysqlConnection.query(sql1, [req.params.id, usercode], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
 
@@ -147,7 +149,7 @@ app.post('/cliente/schedule', (req, res) => {
 });
 
 //Visualizar solicitudes
-app.get('/proveedor/solicitudes', (req, res) => {
+app.get('/proveedor/solicitud/:id', (req, res) => {
   mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
     proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
       if (!err)
@@ -161,12 +163,12 @@ app.get('/proveedor/solicitudes', (req, res) => {
 
 //aceptar solicitud
 app.post('/proveedor/solicitud/:id', (req, res) => {
-	var usercode = session.code;
+  //var usercode = session.code;
+  var usercode = 2;
   let emp = req.body;
-  var sql1 = "SET @solicitud = ?; \
-  UPDATE solicitud SET accepted = true \
-  WHERE solicitud.codsolicitud = ?"; 
-  mysqlConnection.query(sql1, [req.params.id], (err, rows, fields) => {
+  var sql1 = "  UPDATE solicitud SET solicitud.accepted = 1 \
+  WHERE solicitud.proveedor_codproveedor = ? AND solicitud.cliente_codcliente = ?"; 
+  mysqlConnection.query(sql1, [usercode, req.params.id], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
 
