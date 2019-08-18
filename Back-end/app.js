@@ -125,7 +125,7 @@ var getDates = function(startDate, endDate) {
 };
 
 
-//Insertar horario
+//agendar horario
 app.post('/cliente/schedule', (req, res) => {
 	var usercode = session.code;
   let emp = req.body;
