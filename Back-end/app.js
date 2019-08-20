@@ -13,6 +13,7 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+
 app.use(bodyparser.json());
 
 var mysqlConnection = mysql.createConnection({
