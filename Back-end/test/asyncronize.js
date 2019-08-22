@@ -1,5 +1,4 @@
-//Para pruebas asincronicas
-//Empezando pruebas unitarias
+
 before(done => {
     console.log('\n\n-----------------------\n--\n-- START TEST\n--\n-------------------------');
     done();
