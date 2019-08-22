@@ -18,6 +18,7 @@ CREATE TABLE cliente (
     codcliente   INTEGER NOT NULL,
     nombre       VARCHAR(200) NOT NULL,
     apellido     VARCHAR(200) NOT NULL,
+    correo		VARCHAR(300) NOT NULL,
     usuario     VARCHAR(100) NOT NULL,
     contrasena   VARCHAR(50) NOT NULL
 );
@@ -37,6 +38,8 @@ ALTER TABLE horario ADD CONSTRAINT horario_pk PRIMARY KEY ( codhorario );
 CREATE TABLE proveedor (
     codproveedor             INTEGER NOT NULL,
     nombre                   VARCHAR(100) NOT NULL,
+    apellido    			 VARCHAR(200) NOT NULL,
+    correo					VARCHAR(300) NOT NULL,
     contrasena               VARCHAR(50) NOT NULL,
     categoria_codcategoria   INTEGER NOT NULL
 );
