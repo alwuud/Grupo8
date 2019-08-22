@@ -34,4 +34,4 @@ describe('#Synchronous user crud test', () => {
                     done(err);
                 });
         }).timeout(0);
-    })
+    })});

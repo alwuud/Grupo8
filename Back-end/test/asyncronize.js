@@ -27,4 +27,4 @@ describe('#Asynchronous user crud test', () => {
                 done();
                 console.log('status code: %s, user: %s',res.statusCode, util.inspect(res.body, false, null))
             });
-    }).timeout(0);
+    }).timeout(0)});
