@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "test": "mocha G8ANALISIS/test/*.js --watch"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +16,6 @@
     "mysql": "^2.16.0"
   },
   "devDependencies": {},
-  "description": ""
+  "description": "",
+  
 }
