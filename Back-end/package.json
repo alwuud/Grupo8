@@ -16,6 +16,6 @@
     "mysql": "^2.16.0"
   },
   "devDependencies": {},
-  "description": ""
+  "description": "Unit test"
   
 }

@@ -8,29 +8,16 @@ after(done => {
     done();
 });
 /* asyn test */
-describe('#Synchronous user crud test', () => {
-    describe('## get users', () => {
-        it('get "users" record', done => {
-            chai.request(server)
-                .get('/users')
-                .end(function (err, res) {
-                    if (err) done(err);
-                    done();
-                    console.log('status code: %s, users: %s', res.statusCode, res.body.length)
-                });
-        }).timeout(0);
-    })
-    describe('## Save Users', () => {
-        it('save "user" record', done => {
-            chai.request(server)
-                .post('/users')
-                .send(user)
-                .then(res => {
-                    done();
-                    console.log('status code: %s, user saved with id: %s', res.statusCode, res.body.insertId)
-                })
-                .catch(err => {
-                    done(err);
-                });
-        }).timeout(0);
-    })});
+var assert = require('assert');
+ 
+describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('debe retornar -1 cuando el valor no esta presente', function() {
+      assert.equal([1,2,3].indexOf(4), -1);
+    });
+ 
+    it('debe retornar la primera ocurrencia del valor especificado', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
