@@ -18,8 +18,8 @@ app.use(bodyparser.json());
 
 var mysqlConnection = mysql.createConnection({
     host: 'localhost', //route
-    user: 'admin', //
-    password: 'password',
+    user: 'root', //
+    password: '12345',
     database: 'analisis1',
     multipleStatements: true
 });
@@ -45,7 +45,7 @@ app.post('/proveedor/registry', (req, res) => {
     var sql = "SET @username = ?SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
     CALL addproveedor(@id,@paswd,@email, @nombres, @apellidos);";
 
-	mysqlConnection.query('SELECT * FROM usuario WHERE username = ? OR email = ?', [username, email], function(error, results, fields) {
+	mysqlConnection.query('SELECT * FROM proveedor WHERE username = ? OR email = ?', [username, email], function(error, results, fields) {
 	if (results.length > 0) {
 		console.log("Not unique");
 
@@ -66,7 +66,7 @@ app.post('/proveedor/registry', (req, res) => {
 
 app.get('/client/:id', (req, res) => {
     mysqlConnection.query('SELECT horario.fecha, horario.hora_inicio, horario.hora_fin FROM horario, proveedor WHERE \
-      proveedor.codproveedor = horario.proveedor AND proveedor.codproveedor = ?', [req.params.id], (err, rows, fields) => {
+      proveedor.codproveedor = horario.proveedor_codproveedor AND proveedor.codproveedor = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
         else
@@ -81,7 +81,7 @@ app.post('/proveedor/horario', (req, res) => {
 	let emp = req.body;
   let fecha = req.body.fecha;
   let should = true;
-  mysqlConnection.query('SELECT horario.fecha FROM horario WHERE horario.proveedor = ?', [code], (err, rows, fields) => {
+  mysqlConnection.query('SELECT horario.fecha FROM horario WHERE horario.proveedor_codproveedor = ?', [code], (err, rows, fields) => {
         if (!err){
           rows.forEach(function(row) {
             if(fecha == row.fecha)
@@ -93,7 +93,7 @@ app.post('/proveedor/horario', (req, res) => {
     })
     if (should != false)	{
       var sql = "SET @fecha = ?;SET @horai = ?;SET @horaf = ?;\
-    CALL horarioset(@fecha,@horai,@horaf);";
+    CALL addhorario(@fecha,@horai,@horaf);";
          mysqlConnection.query(sql, [emp.fecha, emp.hora_inicio, emp.hora_fin], (err, rows, fields) => {
           if (!err){
               res.send('Updated successfully');
@@ -130,11 +130,11 @@ var getDates = function(startDate, endDate) {
 app.post('/cliente/schedule', (req, res) => {
 	var usercode = session.code;
   let emp = req.body;
-  var sql1 = "SET @fecha = ?;SET @hora_inicio = ?, SET @hora_fin = ?, SET @usuario;\
-  CALL addschedule_client(@fecha,@hora_inicio,@hora_fin, @usuario);";
+  var sql1 = "SET @horario = ?; SET @usuario;\
+  CALL set_cita_client(@horario, @usuario);";
   var sql2 = "SET @fecha = ?;SET @hora_inicio = ?, SET @hora_fin = ?, SET @usuario;\
-  CALL addschedule_prov(@fecha,@hora_inicio,@hora_fin, @usuario);";
-  mysqlConnection.query(sql1, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode], (err, rows, fields) => {
+  CALL set_horario_prov(@fecha,@hora_inicio,@hora_fin, @usuario);";
+  mysqlConnection.query(sql1, [emp.horario, usercode], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
 
@@ -153,7 +153,7 @@ mysqlConnection.query(sql2, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode]
 //Visualizar solicitudes
 app.get('/proveedor/solicitudes', (req, res) => {
   mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
-    proveedor.codproveedor = solicitud.proveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
+    proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
       if (!err)
           res.send(rows);
       else
