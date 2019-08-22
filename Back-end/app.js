@@ -5,7 +5,6 @@ const express = require('express'),
 const session = require('express-session');
 const path = require('path');
 const bodyparser = require('body-parser');
-const moment = require('moment');
 
 app.use(session({
 	secret: 'secret',
@@ -20,7 +19,7 @@ var mysqlConnection = mysql.createConnection({
     host: 'localhost', //route
     user: 'root', //
     password: '12345',
-    database: 'analisis1',
+    database: 'proyecto',
     multipleStatements: true
 });
 
@@ -42,15 +41,18 @@ app.post('/proveedor/registry', (req, res) => {
     let emp = req.body;
     var username = req.body.username;
     var email = req.body.email;
-    var sql = "SET @username = ?SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
-    CALL addproveedor(@id,@paswd,@email, @nombres, @apellidos);";
+    var sql = "SET @username = ?; SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?; SET @categoria = ?;\
+    INSERT INTO proveedor ( username, contrasena, email, nombre, apellido, categoria_codcategoria ) \
+     VALUES ( @username,@paswd,@email, @nombres, @apellidos, @categoria);"
+    var sql2 = "SET @username = ?SET @paswd = ?;SET @email = ?;SET @nombres = ?;SET @apellidos = ?;\
+    CALL addproveedor(@username,@paswd,@email, @nombres, @apellidos);";
 
 	mysqlConnection.query('SELECT * FROM proveedor WHERE username = ? OR email = ?', [username, email], function(error, results, fields) {
 	if (results.length > 0) {
 		console.log("Not unique");
 
 	} else {
-			mysqlConnection.query(sql, [username, emp.passwd, email, emp.nombres,emp.apellidos], (err, rows, fields) => {
+			mysqlConnection.query(sql, [username, emp.passwd, email, emp.nombres, emp.apellidos, emp.categoria], (err, rows, fields) => {
        		if (!err)
             	res.send('Updated successfully');
 			else
@@ -77,7 +79,7 @@ app.get('/client/:id', (req, res) => {
 
 //ingresar horarios
 app.post('/proveedor/horario', (req, res) => {
-	var username = req.session.code;
+	var usercode = req.session.code;
 	let emp = req.body;
   let fecha = req.body.fecha;
   let should = true;
@@ -92,9 +94,10 @@ app.post('/proveedor/horario', (req, res) => {
             console.log(err);
     })
     if (should != false)	{
-      var sql = "SET @fecha = ?;SET @horai = ?;SET @horaf = ?;\
-    CALL addhorario(@fecha,@horai,@horaf);";
-         mysqlConnection.query(sql, [emp.fecha, emp.hora_inicio, emp.hora_fin], (err, rows, fields) => {
+      var sql = "SET @fecha = ?;SET @horai = ?;SET @horaf = ?; SET @proveedor =?;\
+      INSERT INTO horario ( fecha, hora_inicio, hora_fin, proveedor_codproveedor ) \
+      VALUES ( @fecha, @horai, @horaf, @proveedor)";
+         mysqlConnection.query(sql, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode], (err, rows, fields) => {
           if (!err){
               res.send('Updated successfully');
 
@@ -130,23 +133,16 @@ var getDates = function(startDate, endDate) {
 app.post('/cliente/schedule', (req, res) => {
 	var usercode = session.code;
   let emp = req.body;
-  var sql1 = "SET @horario = ?; SET @usuario;\
-  CALL set_cita_client(@horario, @usuario);";
-  var sql2 = "SET @fecha = ?;SET @hora_inicio = ?, SET @hora_fin = ?, SET @usuario;\
-  CALL set_horario_prov(@fecha,@hora_inicio,@hora_fin, @usuario);";
-  mysqlConnection.query(sql1, [emp.horario, usercode], (err, rows, fields) => {
+  var sql1 = "SET @horario = ?; SET @usuario; SET @proveedor;\
+  INSERT INTO cita ( horario_codhorario, cliente_codcliente, proveedor_codproveedor ) \
+  VALUES ( @horario, @usuario, @proveedor)";
+
+  mysqlConnection.query(sql1, [emp.horario, usercode,emp.proveedor], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
 
     else
         console.log(err);
-})
-mysqlConnection.query(sql2, [emp.fecha, emp.hora_inicio, emp.hora_fin, usercode], (err, rows, fields) => {
-  if (!err)
-      res.send('Updated successfully');
-
-  else
-      console.log(err);
 })
 });
 
@@ -167,9 +163,9 @@ app.get('/proveedor/solicitudes', (req, res) => {
 app.post('/proveedor/solicitud/:id', (req, res) => {
 	var usercode = session.code;
   let emp = req.body;
-  var sql1 = "SET @solicitud = ?;\
-  CALL change_accepted(@solicitud);";
- 
+  var sql1 = "SET @solicitud = ?; \
+  UPDATE solicitud SET accepted = true \
+  WHERE solicitud.codsolicitud = ?"; 
   mysqlConnection.query(sql1, [req.params.id], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
