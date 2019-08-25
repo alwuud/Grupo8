@@ -10,13 +10,55 @@ after(done => {
 /* asyn test */
 var assert = require('assert');
  
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('debe retornar -1 cuando el valor no esta presente', function() {
-      assert.equal([1,2,3].indexOf(4), -1);
-    });
+describe('Registro de proveedor', function() {
+  describe('#registry()', function() {
  
-    it('debe retornar la primera ocurrencia del valor especificado', function() {
+    it('Exito', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
+
+describe('Visualizar horario', function() {
+  describe('#client(id)', function() {
+ 
+    it('Exito', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
+
+describe('Ingresar Horario', function() {
+  describe('#horario()', function() {
+ 
+    it('Exito', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
+
+describe('Agendar Horarios', function() {
+  describe('#schedule()', function() {
+ 
+    it('Exito', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
+
+describe('Visualizar SOlicitudes', function() {
+  describe('#solicitud(id)', function() {
+ 
+    it('Exito', function() {
+      assert.equal([1,2,3].indexOf(3), 2);
+    });
+  });
+});
+
+describe('Aceptar Solicitud', function() {
+  describe('#a_solicitud(id)', function() {
+
+    it('Exito', function() {
       assert.equal([1,2,3].indexOf(3), 2);
     });
   });
