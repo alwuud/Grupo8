@@ -67,7 +67,7 @@ app.post('/proveedor/registry', (req, res) => {
 //Visualizar   horarios
 
 app.get('/client/:id', (req, res) => {
-    mysqlConnection.query('SELECT horario.fecha, horario.hora_inicio, horario.hora_fin FROM horario, proveedor WHERE \
+    mysqlConnection.query('SELECT horario.codhorario, horario.fecha, horario.hora_inicio, horario.hora_fin FROM horario, proveedor WHERE \
       proveedor.codproveedor = horario.proveedor_codproveedor AND proveedor.codproveedor = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
