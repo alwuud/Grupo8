@@ -177,3 +177,24 @@ app.post('/proveedor/solicitud/:id', (req, res) => {
 })
 
 });
+
+
+
+//Modificar horario
+app.post('/cliente/mod_schedule/:id', (req, res) => {
+  //var usercode = session.code;
+  var usercode = 1;
+  let emp = req.body;
+  var sql1 = "SET @horario = ?; SET @usuario = ?;\
+  INSERT INTO cita ( horario_codhorario, cliente_codcliente ) \
+  VALUES ( @horario, @usuario); \
+  DELETE FROM cita WHERE horario_codhorario = ? ;";
+
+  mysqlConnection.query(sql1, [req.body.id_hor, usercode, req.params.id], (err, rows, fields) => {
+    if (!err)
+        res.send('Updated successfully');
+
+    else
+        console.log(err);
+})
+});
