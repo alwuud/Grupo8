@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-      "test": "mocha "
+    "test": "mocha "
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,9 @@
     "mocha": "^6.2.0",
     "mysql": "^2.16.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
+  },
   "description": "Unit test"
-  
 }
