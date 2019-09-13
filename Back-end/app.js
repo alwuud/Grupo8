@@ -1,11 +1,13 @@
 const mysql = require('mysql');
 const express = require('express'),
   app = express(),
-  port = process.env.PORT || 3000;
+  port = process.env.PORT || 3001;
 const session = require('express-session');
 const path = require('path');
 const bodyparser = require('body-parser');
+var cors = require('cors')
 
+app.use(cors())
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -181,7 +183,7 @@ app.post('/proveedor/solicitud/:id', (req, res) => {
 
 
 //Modificar horario
-app.post('/cliente/mod_schedule/:id', (req, res) => {
+app.post('/cliente/mod_schedule', (req, res) => {
   //var usercode = session.code;
   var usercode = 1;
   let emp = req.body;
@@ -197,4 +199,28 @@ app.post('/cliente/mod_schedule/:id', (req, res) => {
     else
         console.log(err);
 })
+});
+
+
+
+//get horarios from user
+app.get('/client/cita/logged', (req, res) => {
+  mysqlConnection.query('SELECT * FROM cita, horario WHERE \
+    cita.horario_codhorario = horario.codhorario AND cita.cliente_codcliente = 1', [], (err, rows, fields) => {
+      if (!err)
+          res.send(rows);
+      else
+          console.log(err);
+  })
+});
+
+//get horarios not reserved
+app.get('/prov/cita/notsel', (req, res) => {
+  mysqlConnection.query('SELECT * FROM cita, horario, proveedor WHERE \
+    cita.horario_codhorario = horario.codhorario AND horario.proveedor_codproveedor = proveedor.codproveedor AND proveedor.codproveedor =1', [], (err, rows, fields) => {
+      if (!err)
+          res.send(rows);
+      else
+          console.log(err);
+  })
 });
