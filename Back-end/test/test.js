@@ -32,3 +32,16 @@ describe('test-proveedor',function(){
     });
 
 });
+
+describe ("mod_historia",function(){
+    it("gets some citas", function(done){
+        request(app).get('/prov/cita/notsel')
+        .expect(200,done)
+    })
+    it("posts story", function(done){
+        request(app).post('/doctor/new')
+        .send({nombre:'john',apellido:'smith',especialidad:1, hospital:'la paz'})
+        .expect(302)
+        .expect('Updated succesfully',done)
+    })
+})
