@@ -34,13 +34,13 @@ describe('test-proveedor',function(){
 });
 
 describe ("mod_historia",function(){
-    it("gets some citas", function(done){
-        request(app).get('/prov/cita/notsel')
+    it("should get current user citas", function(done){
+        request(app).get('/client/cita/logged')
         .expect(200,done)
     })
-    it("posts story", function(done){
-        request(app).post('/doctor/new')
-        .send({nombre:'john',apellido:'smith',especialidad:1, hospital:'la paz'})
+    it("should posts a new schedule and deltes previous one", function(done){
+        request(app).post('/cliente/mod_schedule')
+        .send({current_sch:1,next_sch:2})
         .expect(302)
         .expect('Updated succesfully',done)
     })

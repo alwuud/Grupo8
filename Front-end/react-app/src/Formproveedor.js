@@ -7,9 +7,12 @@ class ModHorario extends Component{
         super(props)
     
         this.state = {
-             id_horario: '',
-             title: '',
-             id_new: ''
+             username: '',
+             passwd: '',
+             nombres: '',
+             apellidos: '',
+             email: '',
+             cateogira: ''
         }
     }
 
@@ -22,7 +25,7 @@ class ModHorario extends Component{
        e.preventDefault()
        console.log(this.state)
        axios
-            .post('http://localhost:3001/cliente/mod_schedule/:id',this.state)
+            .post('http://localhost:3001//proveedor/registry',this.state)
         	.then(response => {
                 console.log(response)
             })
@@ -39,15 +42,30 @@ class ModHorario extends Component{
                 <form onSubmit={this.submitHandler}>
                     
                 <div> 
-                    Ingrese el nombre:
+                    Ingrese el nombre de usuario:
                     <input type = "text" name= "title" value={title} onChange={this.changeHandler}></input>
                 </div>
                 <br></br>
                 <div> 
-                    Ingrese el apellido:<br></br>
+                    Ingrese una contraseña:
+                    <input type = "text" name= "title" value={title} onChange={this.changeHandler}></input>
+                </div>
+                <br></br>
+                <div> 
+                    Ingrese su nombre:
+                    <input type = "text" name= "title" value={title} onChange={this.changeHandler}></input>
+                </div>
+                <br></br>
+                <div> 
+                    Ingrese su apellido:<br></br>
                 <input type = "text" name= "title" value={title} onChange={this.changeHandler}></input>
                 </div>
                 
+                <br></br>
+                <div> 
+                   Seleccione una categoria:
+                    <input type = "text" name= "title" value={title} onChange={this.changeHandler}></input>
+                </div>
                 <br></br>
                 <button type="submit">Submit</button>
                 </form>
@@ -55,4 +73,4 @@ class ModHorario extends Component{
         )
     }
 }
-export default ModHorario
+export default Formproveedor
