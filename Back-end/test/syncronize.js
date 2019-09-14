@@ -63,3 +63,22 @@ describe('Aceptar Solicitud', function() {
     });
   });
 });
+
+describe('#mod_reserva()',function(){
+  context('without arguments in body', function() {
+      it('should return 0', function() {
+        expect(mod_reserva(req,res)).to.equal(0)
+      })
+    })
+
+    context('with arguments in body', function() {
+      it('should return 1', function() {
+        expect(mod_reserva(req, res)).to.equal(1)
+      })
+    })
+    context('with data already taken', function() {
+      it('should return 0', function() {
+        expect(mod_reserva(req, res)).to.equal(0)
+      })
+    })
+});
