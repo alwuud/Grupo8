@@ -192,7 +192,7 @@ app.post('/cliente/mod_schedule', (req, res) => {
   VALUES ( @horario, @usuario); \
   DELETE FROM cita WHERE horario_codhorario = ? ;";
 
-  mysqlConnection.query(sql1, [req.body.id_hor, usercode, req.params.id], (err, rows, fields) => {
+  mysqlConnection.query(sql1, [req.body.next_sch, usercode, req.body.current_sch], (err, rows, fields) => {
     if (!err)
         res.send('Updated successfully');
 
