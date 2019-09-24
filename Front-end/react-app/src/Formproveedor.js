@@ -12,7 +12,7 @@ class ModHorario extends Component{
              nombres: '',
              apellidos: '',
              email: '',
-             cateogira: ''
+             categoria: ''
         }
     }
 
