@@ -49,7 +49,7 @@ describe ("mod_historia",function(){
 
 describe ("solicitud") , function(){
     it ("should get solicitueds that user have", function(done){
-        request(app).get('/proveedor/solicitud')
+        request(app).get('/proveedor/solicitud/:id')
         .expect(200, done)
     })
     it ("should change status of solicitud",function(done){

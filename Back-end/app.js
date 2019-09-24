@@ -150,35 +150,6 @@ app.post('/cliente/schedule/:id', (req, res) => {
 })
 });
 
-//Visualizar solicitudes
-app.get('/proveedor/solicitud/:id', (req, res) => {
-  mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
-    proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
-      if (!err)
-          res.send(rows);
-      else
-          console.log(err);
-  })
-});
-
-
-
-//aceptar solicitud
-app.post('/proveedor/solicitud/:id', (req, res) => {
-  //var usercode = session.code;
-  var usercode = 2;
-  let emp = req.body;
-  var sql1 = "  UPDATE solicitud SET solicitud.accepted = 1 \
-  WHERE solicitud.proveedor_codproveedor = ? AND solicitud.cliente_codcliente = ?"; 
-  mysqlConnection.query(sql1, [usercode, req.params.id], (err, rows, fields) => {
-    if (!err)
-        res.send('Updated successfully');
-
-    else
-        console.log(err);
-})
-
-});
 
 
 
@@ -223,4 +194,33 @@ app.get('/prov/cita/notsel', (req, res) => {
       else
           console.log(err);
   })
+});
+
+
+//Visualizar solicitudes
+app.get('/proveedor/solicitud/:id', (req, res) => {
+  mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
+    proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
+      if (!err)
+          res.send(rows);
+      else
+          console.log(err);
+  })
+});
+
+
+
+//aceptar solicitud
+app.post('/proveedor/solicitud/:id', (req, res) => {
+  //var usercode = session.code;
+  var usercode = 2;
+  var sql1 = "  UPDATE solicitud SET solicitud.accepted = 1 \
+  WHERE solicitud.proveedor_codproveedor = ? AND solicitud.cliente_codcliente = ?"; 
+  mysqlConnection.query(sql1, [usercode, req.params.id], (err, rows, fields) => {
+    if (!err)
+        res.send('Updated successfully');
+
+    else
+        console.log(err);
+})
 });
