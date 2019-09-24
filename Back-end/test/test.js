@@ -45,3 +45,17 @@ describe ("mod_historia",function(){
         .expect('Updated succesfully',done)
     })
 })
+//TDD for visualización de solicitud
+
+describe ("solicitud") , function(){
+    it ("should get solicitueds that user have", function(done){
+        request(app).get('/proveedor/solicitud')
+        .expect(200, done)
+    })
+    it ("should change status of solicitud",function(done){
+        request(app).post('/proveedor/solicitud/:id')
+        .send({Solicitud_id:1})
+        .expect(302)
+        .expect('Updated succesfully', done)
+    })
+}
