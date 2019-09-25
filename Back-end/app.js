@@ -198,9 +198,11 @@ app.get('/prov/cita/notsel', (req, res) => {
 
 
 //Visualizar solicitudes
-app.get('/proveedor/solicitud/:id', (req, res) => {
+app.get('/proveedor/solicitud', (req, res) => {
+  //var usercode = session.code;
+  var usercode = 1;
   mysqlConnection.query('SELECT * FROM solicitud, proveedor WHERE \
-    proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [req.params.id], (err, rows, fields) => {
+    proveedor.codproveedor = solicitud.proveedor_codproveedor AND proveedor.codproveedor = ? AND solicitud.accepted = false', [usercode], (err, rows, fields) => {
       if (!err)
           res.send(rows);
       else
@@ -211,9 +213,9 @@ app.get('/proveedor/solicitud/:id', (req, res) => {
 
 
 //aceptar solicitud
-app.post('/proveedor/solicitud/:id', (req, res) => {
+app.post('/proveedor/solicitud', (req, res) => {
   //var usercode = session.code;
-  var usercode = 2;
+  var usercode = 1;
   var sql1 = "  UPDATE solicitud SET solicitud.accepted = 1 \
   WHERE solicitud.proveedor_codproveedor = ? AND solicitud.cliente_codcliente = ?"; 
   mysqlConnection.query(sql1, [usercode, req.params.id], (err, rows, fields) => {

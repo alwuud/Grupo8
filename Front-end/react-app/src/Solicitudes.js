@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Table, {flatten, unflatten} from 'tablex';
- class getHorariobyProv extends Component {
+ class Solicitudes extends Component {
      constructor(props){
          super(props)
 
@@ -11,7 +11,7 @@ import Table, {flatten, unflatten} from 'tablex';
      }
 
      componentDidMount(){
-         axios.get('http://localhost:3001/proveedor/solicitud/:id')
+         axios.get('http://localhost:3001/proveedor/solicitud')
          .then(response => {
              console.log(response)
              this.setState({solicitudes: response.data})

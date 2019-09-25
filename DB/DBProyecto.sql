@@ -47,9 +47,11 @@ CREATE TABLE proveedor (
 );
 
 CREATE TABLE solicitud (
+    solicitud_id INTEGER NOT NULL
     cliente_codcliente   INTEGER NOT NULL,
     proveedor_codproveedor   INTEGER NOT NULL,
     accepted BIT NOT NULL
+    PRIMARY KEY (solicitud_id)
 );
 
 
