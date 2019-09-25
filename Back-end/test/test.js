@@ -37,28 +37,28 @@ describe ("mod_historia",function(){
     it("should get current user citas", function(done){
         request(app).get('/client/cita/logged')
         .expect(200,done)
-    })
+    });
     it("should posts a new schedule and deltes previous one", function(done){
         request(app).post('/cliente/mod_schedule')
         .send({current_sch:1,next_sch:2})
         .expect(302)
         .expect('Updated succesfully',done)
-    })
-})
+    });
+});
 //BDD for visualización de solicitud
 
-describe ("solicitud") , function(){
+describe ("solicitud", function(){
     it ("should get solicitudes that user have", function(done){
         request(app).get('/proveedor/solicitud')
         .expect(200, done)
-    })
+    });
     it ("should change status of solicitud",function(done){
         request(app).post('/proveedor/solicitud/:id')
         .send({Solicitud_id:1})
         .expect(302)
         .expect('Updated succesfully', done)
-    })
-}
+    });
+});
 
 describe ('Calificar servicio', function(){
     describe ('Given a supplier with id', function(){
