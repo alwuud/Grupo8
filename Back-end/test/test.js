@@ -45,10 +45,10 @@ describe ("mod_historia",function(){
         .expect('Updated succesfully',done)
     })
 })
-//TDD for visualización de solicitud
+//BDD for visualización de solicitud
 
 describe ("solicitud") , function(){
-    it ("should get solicitueds that user have", function(done){
+    it ("should get solicitudes that user have", function(done){
         request(app).get('/proveedor/solicitud')
         .expect(200, done)
     })
@@ -59,3 +59,27 @@ describe ("solicitud") , function(){
         .expect('Updated succesfully', done)
     })
 }
+
+describe ('Calificar servicio', function(){
+    describe ('Given a supplier with id', function(){
+        it('Should return information from supplier', function(done){
+            request(app).get('/proveedor/1')
+            .expect(200, done);
+        });
+        describe ('And a customer with id', function(){
+            it('should return json with the list of services supplied', function(done){
+                request(app).get('proveedor/servicios/1')
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+            });
+            describe ('When selected service is rated with stars', function(){
+                it('Then save the rating in the BD', function(done){
+                    request(app).post('/proveedor/rating/')
+                    .send({service_rating:5})
+                    .expect(302)
+                    .expect('Inserted succesfully', done)
+                });
+            });            
+        });
+    });
+});
