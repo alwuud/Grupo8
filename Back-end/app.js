@@ -224,3 +224,14 @@ app.get('/prov/cita/notsel', (req, res) => {
           console.log(err);
   })
 });
+
+//Get specific supplier
+
+app.get('/proveedor/:id', function(req, res, next){
+  mysqlConnection.query('SELECT nombres, apellidos, email FROM proveedor WHERE \
+  codproveedor = ?',[req.params.id], function(err, rows, fields){
+    if(err) throw err;
+    res.send(rows[0]);
+  });
+});
+
