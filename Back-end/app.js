@@ -1,11 +1,15 @@
 const mysql = require('mysql');
 const express = require('express'),
-  app = express(),
-  port = process.env.PORT || 3001;
+app = express(),
+port = process.env.PORT || 3001;
 const session = require('express-session');
 const path = require('path');
 const bodyparser = require('body-parser');
 var cors = require('cors')
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(cors())
 app.use(session({
@@ -20,7 +24,7 @@ app.use(bodyparser.json());
 var mysqlConnection = mysql.createConnection({
     host: 'localhost', //route
     user: 'root', //
-    password: '12345',
+    password: '1234',
     database: 'proyecto',
     multipleStatements: true
 });
@@ -37,6 +41,14 @@ mysqlConnection.connect((err) => {
 app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
+
+
+app.get('/horario', (req, res) => {
+    res.render('calendar');
+});
+
+
+
 
 //Registro de provededor
 app.post('/proveedor/registry', (req, res) => {
